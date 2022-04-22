@@ -1,29 +1,32 @@
 package org.example.model;
 
-import java.io.Serializable;
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 
 @Entity
-@Table(name = "authorship")
+@Table(name = "authorships")
 public class Authorship {
     @Id
     @GeneratedValue
     Long id;
 
-
     @ManyToOne()
     @JoinColumn(name = "book")
     private Book book;
-
 
     @ManyToOne()
     @JoinColumn(name = "author")
     private Author author;
 
-
-    public Authorship(){
+    public Authorship() {
         super();
+    }
+
+    public void setBook(Book book) {
+        this.book = book;
+    }
+
+    public Author getAuthor() {
+        return author;
     }
 }
 
