@@ -6,9 +6,11 @@ import org.example.exception.InvalidBookEntryException;
 import org.example.model.Author;
 import org.example.model.Authorship;
 import org.example.model.Book;
+import org.example.model.Borrow;
 import org.example.repository.AuthorRepository;
 import org.example.repository.AuthorshipRepository;
 import org.example.repository.BookRepository;
+import org.example.repository.BorrowRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -30,6 +32,8 @@ public class BookController {
     AuthorRepository authorRepository;
     @Autowired
     AuthorshipRepository authorshipRepository;
+    @Autowired
+    BorrowRepository borrowRepository;
 
     @RequestMapping(value = "/books", method = RequestMethod.GET)
     public @ResponseBody

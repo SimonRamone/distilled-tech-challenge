@@ -22,4 +22,9 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Modifying
     @Query("UPDATE Book b SET b.title = :title, b.isbn = :isbn, b.status = :status where b.id = :id")
     int updateBookById(String title, String isbn, String status, Long id);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE Book b SET b.status = :status where b.id = :id")
+    int updateBookStatusById(String status, Long id);
 }

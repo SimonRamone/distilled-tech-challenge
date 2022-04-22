@@ -17,7 +17,7 @@ public class Book {
     @NotBlank
     private String title;
     @NotBlank
-    private String status;
+    private String status = "AVAILABLE";
 
     public Book() {
         super();
