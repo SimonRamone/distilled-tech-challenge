@@ -80,7 +80,7 @@ public class BookController {
 
     @RequestMapping(value = "/books/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void deleteEntity(@PathVariable Long id) throws BookNotFoundException {
+    public void deleteBook(@PathVariable Long id) throws BookNotFoundException {
         Optional<Book> book = bookRepository.findById(id);
         if (!book.isPresent()) throw new BookNotFoundException(id);
         bookRepository.deleteById(id);
