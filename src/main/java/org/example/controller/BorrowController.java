@@ -1,19 +1,16 @@
 package org.example.controller;
 
-import org.example.exception.*;
-import org.example.model.Author;
-import org.example.model.Authorship;
+import org.example.exception.BookNotAvailableException;
+import org.example.exception.BookNotFoundException;
+import org.example.exception.BorrowNotFoundException;
 import org.example.model.Book;
 import org.example.model.Borrow;
-import org.example.repository.AuthorRepository;
-import org.example.repository.AuthorshipRepository;
 import org.example.repository.BookRepository;
 import org.example.repository.BorrowRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -38,7 +35,7 @@ public class BorrowController {
     @RequestMapping(value = "/borrows", method = RequestMethod.POST)
     public ResponseEntity<Borrow> addBorrow(@RequestParam(defaultValue = "") Long bookId, @RequestParam(defaultValue = "") String username) throws BookNotFoundException, URISyntaxException, BookNotAvailableException {
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new BookNotFoundException(bookId));
-        if(book.getStatus().equals("BORROWED")) throw new BookNotAvailableException(bookId);
+        if (book.getStatus().equals("BORROWED")) throw new BookNotAvailableException(bookId);
 
         Borrow borrow = new Borrow(username, book);
         borrowRepository.save(borrow);

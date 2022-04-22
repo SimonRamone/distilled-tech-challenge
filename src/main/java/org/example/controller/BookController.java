@@ -6,7 +6,6 @@ import org.example.exception.InvalidBookEntryException;
 import org.example.model.Author;
 import org.example.model.Authorship;
 import org.example.model.Book;
-import org.example.model.Borrow;
 import org.example.repository.AuthorRepository;
 import org.example.repository.AuthorshipRepository;
 import org.example.repository.BookRepository;
@@ -15,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -84,6 +82,18 @@ public class BookController {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Location", path);
         return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
+    }
+
+    @RequestMapping(value = "/books/{id}/updateStatus", method = RequestMethod.PATCH)
+    public void updateBookStatus(@PathVariable Long id, @RequestParam(defaultValue = "") String status) throws BookNotFoundException, InvalidBookEntryException {
+        Optional<Book> book = bookRepository.findById(id);
+        if (!book.isPresent()) throw new BookNotFoundException(id);
+
+        if (!status.equals("BORROWED") && !status.equals("AVAILABLE"))
+            throw new InvalidBookEntryException();
+
+        book.get().setStatus(status);
+        bookRepository.updateBookStatusById(book.get().getStatus(), id);
     }
 
     @RequestMapping(value = "/books/{id}", method = RequestMethod.DELETE)

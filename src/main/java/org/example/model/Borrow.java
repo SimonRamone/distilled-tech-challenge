@@ -21,7 +21,7 @@ public class Borrow {
         super();
     }
 
-    public Borrow(String username, Book book){
+    public Borrow(String username, Book book) {
         super();
         this.username = username;
         this.book = book;
