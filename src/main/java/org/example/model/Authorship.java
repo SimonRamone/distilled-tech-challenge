@@ -21,6 +21,12 @@ public class Authorship {
         super();
     }
 
+    public Authorship(Book book, Author author) {
+        super();
+        this.book = book;
+        this.author = author;
+    }
+
     public void setBook(Book book) {
         this.book = book;
     }

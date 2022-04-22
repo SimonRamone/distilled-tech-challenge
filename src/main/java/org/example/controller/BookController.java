@@ -1,7 +1,10 @@
 package org.example.controller;
 
+import org.example.exception.AuthorNotFoundException;
 import org.example.exception.BookNotFoundException;
 import org.example.exception.InvalidBookEntryException;
+import org.example.model.Author;
+import org.example.model.Authorship;
 import org.example.model.Book;
 import org.example.repository.AuthorRepository;
 import org.example.repository.AuthorshipRepository;
@@ -10,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -84,5 +88,18 @@ public class BookController {
         Optional<Book> book = bookRepository.findById(id);
         if (!book.isPresent()) throw new BookNotFoundException(id);
         bookRepository.deleteById(id);
+    }
+
+    @RequestMapping(value = "books/{id}/addAuthor", method = RequestMethod.POST)
+    public ResponseEntity<Book> addAuthor(@PathVariable(value = "id") Long bookId, @RequestParam(defaultValue = "") Long authorId) throws BookNotFoundException, AuthorNotFoundException, URISyntaxException {
+        Book book = bookRepository.findById(bookId).orElseThrow(() -> new BookNotFoundException(bookId));
+        Author author = authorRepository.findById(authorId).orElseThrow(() -> new AuthorNotFoundException(authorId));
+
+        authorshipRepository.save(new Authorship(book, author));
+
+        String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + "/books/" + book.getId();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(new URI(path));
+        return new ResponseEntity<>(book, headers, HttpStatus.CREATED);
     }
 }
